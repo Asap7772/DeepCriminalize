@@ -61,9 +61,6 @@ except FileNotFoundError:
 num_latent = Gs.input_shapes[0][1]
 
 
-# Generate dummy labels
-dummies = np.zeros([latents.shape[0]] + Gs.input_shapes[1][1:])
-
 def gen_image(latents):
     """
     tool funciton to generate image from latent variables
@@ -82,7 +79,10 @@ while True:
     Input "no" to forget the image
     Otherwise input the name of the file to be saved.
     """
+    # Generate random latents
     latents = np.random.randn(1, *Gs.input_shapes[0][1:])
+    # Generate dummy labels
+    dummies = np.zeros([latents.shape[0]] + Gs.input_shapes[1][1:])
     img_cur = gen_image(latents)
     image1=Image.fromarray(img_cur)
     image1.show()
@@ -96,5 +96,3 @@ while True:
         if not os.path.isfile(path):
             open(path, 'w+').close()
         np.save(path, latents)
-
-

@@ -10,19 +10,9 @@ import time
 import pickle
 import tensorflow as tf
 import PIL
-import matplotlib
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
-import matplotlib.widgets as widgets
-plt.ion()
+
 
 import src.tl_gan.feature_axis as feature_axis
-
-i = 'man'
-path=Path("baseline_models/" + str(i) + ".npy")
-f=open(path, encoding="utf-8")
-latents = np.load(path, encoding="latin1")
-f.close()
 
 ##
 """ load feature directions """
@@ -65,6 +55,14 @@ except FileNotFoundError:
     print('before running the code, download pre-trained model to project_root/asset_model/')
     raise
 
+i = 'asian_man'
+path=Path("baseline_models/" + str(i) + ".npy")
+f=open(path, encoding="utf-8")
+latents = np.load(path, encoding="latin1")
+f.close()
+
+# Generate dummy labels
+dummies = np.zeros([latents.shape[0]] + Gs.input_shapes[1][1:])
 
 def gen_image(latents):
     """
