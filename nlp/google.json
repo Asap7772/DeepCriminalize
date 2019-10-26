@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "deepcriminalize-1572111829696",
+  "private_key_id": "477364a09e5e7ea3fd406ad115563ee0997bd5ab",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCpz+ZawtELbxUe\ns58MWEgRzAmJ1LLbeH1KCCqB7X2diEHRUnvJXBb8KoeWSBTqo+FSYAPtCR9icZlQ\nLqus1nrk+oyKyQShZq/hd4tHT6Q6ZiENhK3SheXWlY+QJDhWBSbqCcb7X1NzQ9ny\nl0xVg0RLuwWXouMFCgX9Vj7ZnsXlzQhJk9Ndao8V7mu1bLAoCsu7WbPdxL153frZ\nBz1fskTFEq8BwurFjcmNsIWFt1HFZDMLgNcmGBl0eHr7IRIDsuTZoR0rCsnFfL6E\n1FAhrRvG+raBs8g0iGzlkXAooFtslS3Kg2ziImgj3ckJrxCxoNtOWAkD8BnJVf5j\nJl1lW6PFAgMBAAECggEAKmxYx3hvurxJ6bVkqPQeLyoLAP7dHyTbIiVnnzWKghJi\nJQ4HBF9oE5/5ZyNDbHo8JrT7jhqPF2w7adN7Cq87nRx2A48kQ8FQc9LGfi6IoBlX\nLRYmSdevO5x6NP/DfkQDvIjsR+0A/2UmXCuNw7hLVeMXitJEBoSCSg/jnEEE/juC\nDdh88rkzJR2m/oDs4KoDjW4nZG9hGJfube4+/3raF9yhJIwYVTxZ9xkRkj5I60Se\nKv8CnDTAc+NYkKvoxJjA0CilDbc00qVF695wUBrygAv3kNN7lBMJ3Ny5eWbc2+4z\nKA8zl3IqVghDN69r4Ou5cxBLPj6IiqXFPzVx8B4aSQKBgQDiOmaCQGthYNpDmi+g\nDM1NA75pW7hvVkMgIFCvrtWUMReo/AEInrublrdoSqSAfe0zciVl4R42FZqXYSsj\nguPb7L8Gdg1zJUWnn4pByTsmDTKSRflxHnBmmMNdjXtsZHihCtVVxLLjJZKRWY5P\nlJ+RTh7MkOjNAfvhP7Howlqm/QKBgQDAKNmpO6P5M5Y0hsxKwjFGs/vUL+THEPh4\nFe08lrOxFDasfU/ymmPBwCdXrhmc0whiaUVG8qv5Ch3MBb77Ff8sv4hJEma3/uxa\nfZpjvUek3ZeRPrer/8qi8rzkPX0ffXTw8EEyXqLz5//nczt+ju/ndsAY7aG+yKsY\ny8ZGbqGeaQKBgDO2j9o0aZdv8VTEuSBH7OIu+ebRnZ5txJhiaq9OMupWModhW8ch\nqdcOI8zGS0ZIAuHgtOXOCP7p/1WdU6Qhdn6+ZohOkhKBMaP4lz0kh83R9H51Wmje\nQWligD4xakZDzUNa25tohE/iNdfd9ecBHVy009uFQIIkcvRxf/SqANjtAoGAeL7y\njrnQPn4g616srmk6B4B/RITX0BKk3uiASyszPJlEBb00aHCFMLEqx5i5tWaSBSy7\nAGrqjzHBKXuO1z2qO5ca7zel3gZMxEvaoMPGah1n6TesuGKiFSRMd2r/3bK6sc92\nWE1JPdRRZEFvaAYvT5W5/bAMi9KSWKFrNMS9v8kCgYAEF6m3hrskBV/o5DR0dvs9\nryBA7cJqua6w91UJLoooOf66Q9EnGPYOFedqkc35w76ysdWwTndi5fl4nds+9oRY\n1z9nShnYcDtLxltxnZHkE0AbtfDI0Gcs2x2xHSDZtMar2Dnp4m3tPzhBK+DKd+zR\nUSCxCtucB1bAirbXybyatA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "starting-account-10kva5i3dbyj@deepcriminalize-1572111829696.iam.gserviceaccount.com",
+  "client_id": "106549597729185137782",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/starting-account-10kva5i3dbyj%40deepcriminalize-1572111829696.iam.gserviceaccount.com"
+}
