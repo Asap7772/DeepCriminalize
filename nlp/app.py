@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
-from nlp.KeyPhraseApi import KeyPhrases
-from nlp.SyntaxApi import WordSyntax
-from src.script_generation_interactive import genImage
+from nlp.keyPhraseApi import KeyPhrases
+from nlp.syntaxApi import WordSyntax
+# from KeyPhraseApi import KeyPhrases
+# from SyntaxApi import WordSyntax
+from src.tl_gan.script_generation_interactive import gen_image
 
 app = Flask(__name__)
 
@@ -30,31 +32,33 @@ def put():
     features = {}
     singleWords = {}
     for key in keyPhrases:
-        direct = key.title().replace('_')
+        print('key',key)
+        direct = key.title().replace(' ','_')
         for a in arr:
             if direct == a:
-                features[direct] = [direct, '']
+                features[direct] = 1
             else:
-                words = key.split(' ')
+                words = direct.split('_')
                 for word in words:
                     if word.lower() == a.lower():
-                        features[word] = [word, '']
+                        features[word] = 1
 
     prev = None
     for x in syntaxDict:
         if syntaxDict[x] == 'adj' or syntaxDict[x] == 'adv':
             pass
 
-    image1, image2, image3 = genImage(gender, ethnicity, features)
+    image1, image2, image3 = gen_image(gender, ethnicity, features)
 
     dict[uid] = [officer, caseNumber, witnessName, gender, ethnicity, moreDetails, keyPhrases, syntaxDict]
-
+    print('here',dict)
 
     return jsonify(dict)
 
 @app.route("/", methods=["GET"])
 def get():
     uid = request.json['uid']
+    print(dict)
     return jsonify({'image1': 'hi', 'image2': 'hi', 'image3':'hi','description': dict[uid][-1]})
 
 @app.route("/clear/")

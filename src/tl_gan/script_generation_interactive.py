@@ -13,8 +13,9 @@ import tensorflow as tf
 
 import src.tl_gan.feature_axis as feature_axis
 
-def gen_image(race,gender,change_feature_dict):
-    race, gender = race.lower(), gender.lower()
+def gen_image(gender,race,change_feature_dict):
+    print(change_feature_dict)
+    race, gender = race.lower().strip(), gender.lower().strip()
     if gender == 'female':
         gender = 'woman'
     else:
@@ -24,6 +25,21 @@ def gen_image(race,gender,change_feature_dict):
         race = 'african_american'
     elif race == 'east asian':
         race = 'asian'
+    print(race,gender)
+    idx=0
+    if race=='asian':
+        idx=0
+    elif race=='indian':
+        idx=1
+    elif race=='caucasian':
+        idx=2
+    elif race=='hispanic':
+        idx=3
+    elif race=='african_american':
+        idx=4
+    idx *= 2
+    if gender == 'woman':
+        idx += 1
 
     """ location to save images """
     path_gan_explore_interactive = './asset_results/pggan_celeba_feature_axis_explore_interactive/'
@@ -45,11 +61,10 @@ def gen_image(race,gender,change_feature_dict):
     feature_name_dict = {feature_name[i]:i for i in range(len(feature_name))}
     #change_feature_dict = {feature_name[i]:1 for i in range(len(feature_name))}
     data=open('json.txt')
+    data = data.read()
     mask=json.loads(data)
     #mask = {feature_name[i]:0 for i in range(len(feature_name))}
     #mask['Big Lips'] = 1
-    for feature in change_feature_dict:
-        mask[feature] *= change_feature_dict[feature]
 
     """ load gan model """
 
@@ -103,13 +118,17 @@ def gen_image(race,gender,change_feature_dict):
 
     images=[]
     for i in range(1,4):
+        maski=mask[idx]
+        for feature in change_feature_dict:
+            maski[feature] *= change_feature_dict[feature]
         latents = latents_list[i-1]
         for feature in change_feature_dict:
-            change=change_feature_dict[feature]
+            change=maski[feature]
             idx_feature = feature_name_dict[feature]
             feature_lock_status = np.zeros(num_feature).astype('bool')
             feature_direction_disentangled = feature_axis.disentangle_feature_axis_by_idx(feature_direction, idx_base=np.flatnonzero(feature_lock_status))
-            latents += feature_direction_disentangled[:, idx_feature] * change
+            if change:
+                latents += feature_direction_disentangled[:, idx_feature]
         img_cur = gen_image(latents)
         images.append(img_cur)
         # image=Image.fromarray(img_cur)
