@@ -23,7 +23,6 @@ class KeyPhrases:
                 "text": lookupstr
             }
         ]
-
         response = self.text_analytics.key_phrases(documents=documents)
         return response.documents[0].key_phrases
 
