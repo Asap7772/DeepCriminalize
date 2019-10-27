@@ -4,17 +4,20 @@ import os
 from pathlib import Path
 import glob
 import sys
+import PIL
 from PIL import Image
 import numpy as np
-import time
 import pickle
 import tensorflow as tf
-import PIL
-
 
 import src.tl_gan.feature_axis as feature_axis
 
-##
+""" location to save images """
+path_gan_explore_interactive = './asset_results/pggan_celeba_feature_axis_explore_interactive/'
+if not os.path.exists(path_gan_explore_interactive):
+    os.mkdir(path_gan_explore_interactive)
+
+
 """ load feature directions """
 path_feature_direction = './asset_results/pg_gan_celeba_feature_direction_40'
 
@@ -26,8 +29,10 @@ with open(pathfile_feature_direction, 'rb') as f:
 feature_direction = feature_direction_name['direction']
 feature_name = feature_direction_name['name']
 num_feature = feature_direction.shape[1]
+edit_feature_dict = {feature_name[i]:i for i in range(len(feature_name))}
+change_feature_dict = {feature_name[i]:0 for i in range(len(feature_name))}
 
-##
+
 """ load gan model """
 
 # path to model code and weight
@@ -53,6 +58,9 @@ except FileNotFoundError:
     print('before running the code, download pre-trained model to project_root/asset_model/')
     raise
 
+num_latent = Gs.input_shapes[0][1]
+
+
 def gen_image(latents):
     """
     tool funciton to generate image from latent variables
@@ -64,32 +72,29 @@ def gen_image(latents):
     images = images.transpose(0, 2, 3, 1)  # NCHW => NHWC
     return images[0]
 
-directories = [f'asian_man{i}.npy' for i in range (1,4)] + [f'asian_woman{i}.npy' for i in range (1,4)] + [f'white_man{i}.npy' for i in range (1,4)] + [f'white_woman{i}.npy' for i in range (1,4)] + [f'indian_man{i}.npy' for i in range (1,4)] + [f'indian_woman{i}.npy' for i in range (1,4)]
+directories = ['asian_man1.npy']
 
-for i in directories:
-
-    path=Path("baseline_models/" + str(i))
+for img in directories:
+    # Load latents
+    path=Path("baseline_models/" + str(img))
     f=open(path, encoding="utf-8")
     latents = np.load(path, encoding="latin1")
     f.close()
 
-    # Generate dummy labels
-    dummies = np.zeros([latents.shape[0]] + Gs.input_shapes[1][1:])
+# Generate dummy labels
+dummies = np.zeros([latents.shape[0]] + Gs.input_shapes[1][1:])
+latents_copy=latents.copy()
+feature_lock_status = np.zeros(num_feature).astype('bool')
+feature_direction_disentangled = feature_axis.disentangle_feature_axis_by_idx(feature_direction, idx_base=np.flatnonzero(feature_lock_status))
+latents_copy += feature_direction_disentangled[:, 5] * 1
+img_cur2 = gen_image(latents_copy)
+image1=Image.fromarray(img_cur2)
+image1.show()
 
-    img_cur = gen_image(latents)
+i=input()
+path=Path("baseline_models/" + str(i))
 
-    # Warp features
-    latents_copy=latents.copy()
-    feature_lock_status = np.zeros(num_feature).astype('bool')
-    feature_direction_disentangled = feature_axis.disentangle_feature_axis_by_idx(feature_direction, idx_base=np.flatnonzero(feature_lock_status))
-    latents_copy -= feature_direction_disentangled[:, 7] * 1
-    latents_copy += feature_direction_disentangled[:, 23] * 1
-
-    img_cur2 = gen_image(latents_copy)
-    img_cur3=np.hstack([img_cur, img_cur2])
-    image=Image.fromarray(img_cur3)
-    image.show()
-
-
-
-
+if i != 'no':
+    if not os.path.isfile(path):
+        open(path, 'w+').close()
+    np.save(path, latents_copy)

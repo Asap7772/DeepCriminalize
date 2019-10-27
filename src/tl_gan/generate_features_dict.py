@@ -64,33 +64,37 @@ def gen_image(latents):
     images = images.transpose(0, 2, 3, 1)  # NCHW => NHWC
     return images[0]
 
-directories = ['kpop.npy']
+directories = [f'asian_man{i}.npy' for i in range (1,4)] + [f'asian_woman{i}.npy' for i in range (1,4)] + [f'indian_man{i}.npy' for i in range (1,4)] + [f'indian_woman{i}.npy' for i in range (1,4)] + [f'caucasian_man{i}.npy' for i in range (1,4)] + [f'caucasian_woman{i}.npy' for i in range (1,4)] + [f'hispanic_man{i}.npy' for i in range (1,4)] + [f'hispanic_woman{i}.npy' for i in range (1,4)] + [f'black_man{i}.npy' for i in range (1,4)] + [f'black_woman{i}.npy' for i in range (1,4)]
 
-for i in directories:
-
-    path=Path("baseline_models/" + str(i))
+for img in directories:
+    # Load latents
+    path=Path("baseline_models/" + str(img))
     f=open(path, encoding="utf-8")
     latents = np.load(path, encoding="latin1")
     f.close()
 
-    # Generate dummy labels
+    # Generate dummy labels and generating image
     dummies = np.zeros([latents.shape[0]] + Gs.input_shapes[1][1:])
-
     img_cur = gen_image(latents)
-    # image=Image.fromarray(img_cur)
-    # image.show()
 
-    # Warp features
-    latents_copy=latents.copy()
-    feature_lock_status = np.zeros(num_feature).astype('bool')
-    feature_direction_disentangled = feature_axis.disentangle_feature_axis_by_idx(feature_direction, idx_base=np.flatnonzero(feature_lock_status))
-    latents_copy -= feature_direction_disentangled[:, 7] * 1
-    latents_copy += feature_direction_disentangled[:, 23] * 1
+    for i in range(10):
+        print(i)
+        if i==0: 
+            img_cur3 = np.copy(img_cur)
+            i+=1
+            continue
+        # Warp features starting with feature 2 (not implementing "5'o clock shadow")
+        latents_copy=latents.copy()
+        feature_lock_status = np.zeros(num_feature).astype('bool')
+        feature_direction_disentangled = feature_axis.disentangle_feature_axis_by_idx(feature_direction, idx_base=np.flatnonzero(feature_lock_status))
+        latents_copy += feature_direction_disentangled[:, i]
+        i+=1
 
-    img_cur2 = gen_image(latents_copy)
-    img_cur3=np.hstack([img_cur, img_cur2])
+        img_cur2 = gen_image(latents_copy)
+        img_cur3=np.hstack([img_cur3, img_cur2])
     image=Image.fromarray(img_cur3)
     image.show()
+
 
 
 
