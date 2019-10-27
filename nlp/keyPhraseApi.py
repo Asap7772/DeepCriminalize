@@ -1,7 +1,7 @@
 from azure.cognitiveservices.language.textanalytics import TextAnalyticsClient
 from msrest.authentication import CognitiveServicesCredentials
 import os
-import Constants
+import nlp.Constants as Constants
 
 class KeyPhrases:
     def __init__(self, language = 'en'):
@@ -23,7 +23,6 @@ class KeyPhrases:
                 "text": lookupstr
             }
         ]
-
         response = self.text_analytics.key_phrases(documents=documents)
         return response.documents[0].key_phrases
 

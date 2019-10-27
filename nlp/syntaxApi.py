@@ -6,7 +6,8 @@ import os
 
 class WordSyntax:
     def __init__(self, language = 'en'):
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="nlp/google.json"
+        path = "nlp/google.json"
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=path
         self.client = language_v1.LanguageServiceClient()
         self.type_ = enums.Document.Type.PLAIN_TEXT
         self.language = language
@@ -16,17 +17,17 @@ class WordSyntax:
         document = {"content": lookupstr, "type": self.type_, "language": self.language}
         response = self.client.analyze_syntax(document, encoding_type=self.encoding_type)
 
-        pos dict = {}
+        tokdict = {}
         for token in response.tokens:
             text = token.text
-            print(u"Token text: {}".format(text.content))
             part_of_speech = token.part_of_speech
-            print(u"Part of Speech tag: {}".format(enums.PartOfSpeech.Tag(part_of_speech.tag).name))
+            part_of_speech_tag = enums.PartOfSpeech.Tag(part_of_speech.tag).name
 
             dependency_edge = token.dependency_edge
-            print(u"Head token index: {}".format(dependency_edge.head_token_index))
-            print(u"Label: {}".format(enums.DependencyEdge.Label(dependency_edge.label).name))
-
+            head_token_index = dependency_edge.head_token_index
+            label = enums.DependencyEdge.Label(dependency_edge.label).name
+            tokdict[text.content] = [text.content, part_of_speech_tag,label]
+        return tokdict
 
 
 a = WordSyntax()

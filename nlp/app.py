@@ -1,19 +1,27 @@
-from flask import Flask, jsonify, request
-from flask_restful import Resource, Api, reqparse
+from flask import Flask, request, jsonify
+from nlp.KeyPhraseApi import KeyPhrases
+from nlp.SyntaxApi import WordSyntax
 
 app = Flask(__name__)
-api = Api(app)
 
-todos = {}
-class HelloWorld(Resource):
-    def get(self, uid):
-        return {'hello': str(uid)}
 
-    def post(self, uid):
-        json_data = request.get_json(force=True)
-        return str(json_data)
+dict = {}
+@app.route("/", methods=["PUT", "POST"])
+def put():
+    uid = request.json['uid']
+    officer = request.json['o']
+    caseNumber = request.json['cn']
+    witnessName = request.json['wn']
+    gender = request.json['g']
+    ethnicity = request.json['e']
+    moreDetails = request.json['md']
 
-api.add_resource(HelloWorld, '/')
+    keyPhrases = KeyPhrases().lookup(moreDetails)
+    syntaxDict =  WordSyntax().lookup(moreDetails)
+    dict[uid] = [officer, caseNumber, witnessName, gender, ethnicity, moreDetails, keyPhrases, syntaxDict]
+    return jsonify(dict)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route("/", methods=["GET"])
+def get():
+    uid = request.json['uid']
+    return dict[uid][-1]
