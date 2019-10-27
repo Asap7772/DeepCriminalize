@@ -27,7 +27,7 @@ class KeyPhrases:
         response = self.text_analytics.key_phrases(documents=documents)
         return response.documents[0].key_phrases
 
-
-a = KeyPhrases()
-lst = a.lookup("The man was a large asian dude with thick black hair")
-print(lst)
+def test():
+    a = KeyPhrases()
+    lst = a.lookup("The man was a large asian dude with thick black hair")
+    print(lst)
