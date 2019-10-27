@@ -8,7 +8,8 @@ from src.tl_gan.script_generation_interactive import gen_image
 app = Flask(__name__)
 
 
-dict = {}
+dictReturn = {}
+imgs = {}
 @app.route("/", methods=["PUT", "POST"])
 def put():
     uid = request.json['uid']
@@ -50,16 +51,21 @@ def put():
 
     image1, image2, image3 = gen_image(gender, ethnicity, features)
 
-    dict[uid] = [officer, caseNumber, witnessName, gender, ethnicity, moreDetails, keyPhrases, syntaxDict]
-    print('here',dict)
+    dictReturn[uid] = [officer, caseNumber, witnessName, gender, ethnicity, moreDetails, keyPhrases, syntaxDict]
+    imgs[0] = image1.tolist()
+    imgs[1] = image2.tolist()
+    imgs[2] = image3.tolist()
 
-    return jsonify(dict)
+    print('here',dictReturn)
+
+    return jsonify(dictReturn)
 
 @app.route("/", methods=["GET"])
 def get():
     uid = request.json['uid']
-    print(dict)
-    return jsonify({'image1': 'hi', 'image2': 'hi', 'image3':'hi','description': dict[uid][-1]})
+    print(dictReturn)
+    #{'image1': 'hi', 'image2': 'hi', 'image3':'hi'}
+    return jsonify(imgs)
 
 @app.route("/clear/")
 def clear():
