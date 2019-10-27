@@ -1,7 +1,7 @@
 from azure.cognitiveservices.language.textanalytics import TextAnalyticsClient
 from msrest.authentication import CognitiveServicesCredentials
 import os
-import Constants
+import nlp.Constants as Constants
 
 class KeyPhrases:
     def __init__(self, language = 'en'):

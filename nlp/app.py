@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-from KeyPhraseApi import KeyPhrases
-from SyntaxApi import WordSyntax
+from nlp.KeyPhraseApi import KeyPhrases
+from nlp.SyntaxApi import WordSyntax
 
 app = Flask(__name__)
 

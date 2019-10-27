@@ -79,7 +79,3 @@ for i in directories:
     img_cur = gen_image(latents)
     image=Image.fromarray(img_cur)
     image.show()
-
-
-
-

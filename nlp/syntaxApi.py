@@ -6,7 +6,7 @@ import os
 
 class WordSyntax:
     def __init__(self, language = 'en'):
-        path = "google.json"
+        path = "nlp/google.json"
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=path
         self.client = language_v1.LanguageServiceClient()
         self.type_ = enums.Document.Type.PLAIN_TEXT
