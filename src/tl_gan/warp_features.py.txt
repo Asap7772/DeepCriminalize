@@ -77,7 +77,19 @@ for i in directories:
     dummies = np.zeros([latents.shape[0]] + Gs.input_shapes[1][1:])
 
     img_cur = gen_image(latents)
-    image=Image.fromarray(img_cur)
+    # image=Image.fromarray(img_cur)
+    # image.show()
+
+    # Warp features
+    latents_copy=latents.copy()
+    feature_lock_status = np.zeros(num_feature).astype('bool')
+    feature_direction_disentangled = feature_axis.disentangle_feature_axis_by_idx(feature_direction, idx_base=np.flatnonzero(feature_lock_status))
+    latents_copy -= feature_direction_disentangled[:, 7] * 1
+    latents_copy += feature_direction_disentangled[:, 23] * 1
+
+    img_cur2 = gen_image(latents_copy)
+    img_cur3=np.hstack([img_cur, img_cur2])
+    image=Image.fromarray(img_cur3)
     image.show()
 
 
