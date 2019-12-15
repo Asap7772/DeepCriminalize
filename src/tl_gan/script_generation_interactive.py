@@ -96,7 +96,8 @@ def gen_image(gender,race,change_feature_dict):
     filename = f'{race}_{gender}'
     latents_list = []
     for i in range(1,4):
-        path=Path("baseline_models/" + str(filename) + str(i) + ".npy")
+        print(os.getcwd())
+        path=Path(os.getcwd() + "//baseline_models//" + str(filename) + str(i) + ".npy")
         f=open(path, encoding="utf-8")
         latent = np.load(path, encoding="latin1")
         latents_list.append(latent)

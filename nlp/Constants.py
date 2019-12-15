@@ -1,3 +1,3 @@
-EXT_ANALYTICS_SUBSCRIPTION_KEY = "70996e5ba62849b7bf9eccb53c2a9ec3"
-TEXT_ANALYTICS_ENDPOINT = "https://deepcriminalize.cognitiveservices.azure.com/"
-TEXT_ANALYTICS_URL = "https://deepcriminalize.cognitiveservices.azure.com/text/analytics/v2.1/keyPhrases?showStats=True"
+EXT_ANALYTICS_SUBSCRIPTION_KEY = "f861df55922e4287b9de318f55c1da2c"
+TEXT_ANALYTICS_ENDPOINT = "https://deepcriminalizenlpnlpnlp.cognitiveservices.azure.com/"
+TEXT_ANALYTICS_URL = "https://deepcriminalizenlpnlpnlp.cognitiveservices.azure.com/text/analytics/v2.1/keyPhrases?showStats=True"

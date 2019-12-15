@@ -30,11 +30,11 @@ def get_embeddings(keyPhrases = ['bangs']):
     feature_embeddings = np.ndarray(shape=(len(features),50))
     i=0
     for feature in features:
-        print('Feature: ', feature)
+        # print('Feature: ', feature)
         feature = feature.lower()
         feature_embedding = np.zeros((50))
         for word in feature.split():
-            print("Word: ",word)
+            # print("Word: ",word)
             try:
                 word_embedding=embeddings_index[word]
                 feature_embedding = np.add(feature_embedding, word_embedding)
@@ -47,11 +47,11 @@ def get_embeddings(keyPhrases = ['bangs']):
     phrase_embeddings = np.ndarray(shape=(len(keyPhrases),50))
     i=0
     for phrase in keyPhrases:
-        print("Phrase: ",phrase)
+        # print("Phrase: ",phrase)
         phrase = phrase.lower()
         phrase_embedding = np.zeros((50))
         for word in phrase.split():
-            print('Word: ',word)
+            # print('Word: ',word)
             try:
                 word_embedding=embeddings_index[word]
                 phrase_embedding = np.add(phrase_embedding, word_embedding)
@@ -65,12 +65,17 @@ def get_embeddings(keyPhrases = ['bangs']):
 def get_closest_feature():
     features = ['Five o Clock Shadow', 'Arched Eyebrows', 'Attractive', 'Bags Under Eyes', 'Bald', 'Bangs', 'Big Lips', 'Big Nose', 'Black Hair', 'Blond Hair', 'Blurry', 'Brown Hair', 'Bushy Eyebrows', 'Chubby', 'Double Chin', 'Eyeglasses', 'Goatee', 'Gray Hair', 'Heavy Makeup', 'High Cheekbones', 'Male', 'Mouth Slightly Open', 'Mustache', 'Narrow Eyes', 'No Beard', 'Oval Face', 'Pale Skin', 'Pointy Nose', 'Receding Hairline', 'Sideburns', 'Smiling', 'Straight Hair', 'Wavy Hair', 'Wearing Earrings','Wearing Hat', 'Wearing Lipstick', 'Wearing Necklace','Wearing Necktie', 'Young']
     feature_embeddings,phrase_embeddings = get_embeddings()
+    print(feature_embeddings[5])
+    print(phrase_embeddings)
+    print("+=====================")
     results=[]
+    i=0
     for phrase_embedding in phrase_embeddings:
         dot_products=[np.dot(phrase_embedding,feature_embedding) for feature_embedding in feature_embeddings]
         print(dot_products)
         idx = np.argmin(dot_products)
         results.append(features[idx])
+        i+=1
     print(results)
 
 get_closest_feature()
