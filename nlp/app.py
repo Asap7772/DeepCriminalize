@@ -31,33 +31,30 @@ def put():
     ethnicity = request.json['e']
     moreDetails = request.json['md']
 
-
-    # keyPhrases = moreDetails.split()
-
     keyPhrases = KeyPhrases().lookup(moreDetails)
     # syntaxDict =  WordSyntax().lookup(moreDetails)
     print('KeyPhrases:',keyPhrases)
 
-    arr = ['Arched_Eyebrows', 'Attractive', 'Bags_Under_Eyes', 'Bald', 'Bangs', 'Big_Lips',
-    'Big_Nose', 'Black_Hair', 'Blond_Hair', 'Brown_Hair', 'Bushy_Eyebrows', 'Chubby', 'Double_Chin',
-    'Eyeglasses', 'Goatee', 'Gray_Hair', 'Heavy_Makeup', 'High_Cheekbones', 'Male', 'Mouth_Slightly_Open',
-    'Mustache', 'Narrow_Eyes', 'No_Beard', 'Oval_Face', 'Pale_Skin', 'Pointy_Nose', 'Receding_Hairline',
-    'Rosy_Cheeks', 'Sideburns', 'Smiling', 'Straight_Hair', 'Wavy_Hair', 'Young']
+    # arr = ['Arched_Eyebrows', 'Attractive', 'Bags_Under_Eyes', 'Bald', 'Bangs', 'Big_Lips',
+    # 'Big_Nose', 'Black_Hair', 'Blond_Hair', 'Brown_Hair', 'Bushy_Eyebrows', 'Chubby', 'Double_Chin',
+    # 'Eyeglasses', 'Goatee', 'Gray_Hair', 'Heavy_Makeup', 'High_Cheekbones', 'Male', 'Mouth_Slightly_Open',
+    # 'Mustache', 'Narrow_Eyes', 'No_Beard', 'Oval_Face', 'Pale_Skin', 'Pointy_Nose', 'Receding_Hairline',
+    # 'Rosy_Cheeks', 'Sideburns', 'Smiling', 'Straight_Hair', 'Wavy_Hair', 'Young']
 
-    features = {}
-    for key in keyPhrases:
-        # print('key',key)
-        direct = key.title().replace(' ','_')
-        for a in arr:
-            if direct == a:
-                features[direct] = 1
-            else:
-                words = direct.split('_')
-                for word in words:
-                    if word.lower() == a.lower():
-                        features[word] = 1
+    # features = {}
+    # for key in keyPhrases:
+    #     # print('key',key)
+    #     direct = key.title().replace(' ','_')
+    #     for a in arr:
+    #         if direct == a:
+    #             features[direct] = 1
+    #         else:
+    #             words = direct.split('_')
+    #             for word in words:
+    #                 if word.lower() == a.lower():
+    #                     features[word] = 1
 
-    # features = get_closest_feature(keyPhrases = keyPhrases)
+    features = get_closest_feature(keyPhrases = keyPhrases)
 
     print('Features: ',features)
     # prev = None
@@ -71,7 +68,7 @@ def put():
 
 
     # dictReturn[uid] = [officer, caseNumber, witnessName, gender, ethnicity, moreDetails, keyPhrases, syntaxDict]
-    dictReturn[uid] = [gender, ethnicity, moreDetails, keyPhrases]
+    dictReturn[uid] = [gender, ethnicity, moreDetails, features]
 
     # for i in range(len(images)):
     #     imgByteArr = io.BytesIO()
