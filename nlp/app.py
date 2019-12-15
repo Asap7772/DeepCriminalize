@@ -1,19 +1,22 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 from nlp.keyPhraseApi import KeyPhrases
 # from nlp.syntaxApi import WordSyntax
 from src.tl_gan.script_generation_interactive import gen_image
 
 app = Flask(__name__)
+CORS(app)
+
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 
 dictReturn = {}
 imgs = {}
 
-@app.route("/", methods=["OPTIONS"])
-def options():
-    return {"something here": 0}
 
 @app.route("/", methods=["PUT", "POST"])
+@cross_origin()
 def put():
     print(request)
     print(request.json)
@@ -67,7 +70,7 @@ def put():
     imgs[2] = image3.tolist()
 
     print('here',dictReturn)
-
+    
     return jsonify(dictReturn)
 
 @app.route("/", methods=["GET"])
