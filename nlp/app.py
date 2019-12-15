@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-# from nlp.keyPhraseApi import KeyPhrases
+from nlp.keyPhraseApi import KeyPhrases
 # from nlp.syntaxApi import WordSyntax
 from src.tl_gan.script_generation_interactive import gen_image
 
@@ -8,8 +8,15 @@ app = Flask(__name__)
 
 dictReturn = {}
 imgs = {}
+
+@app.route("/", methods=["OPTIONS"])
+def options():
+    return {"something here": 0}
+
 @app.route("/", methods=["PUT", "POST"])
 def put():
+    print(request)
+    print(request.json)
     uid = request.json['uid']
     # officer = request.json['o']
     # caseNumber = request.json['cn']
@@ -19,9 +26,9 @@ def put():
     moreDetails = request.json['md']
 
 
-    keyPhrases = moreDetails.split()
+    # keyPhrases = moreDetails.split()
 
-    # keyPhrases = KeyPhrases().lookup(moreDetails)
+    keyPhrases = KeyPhrases().lookup(moreDetails)
     # syntaxDict =  WordSyntax().lookup(moreDetails)
 
     arr = ['Arched_Eyebrows', 'Attractive', 'Bags_Under_Eyes', 'Bald', 'Bangs', 'Big_Lips',

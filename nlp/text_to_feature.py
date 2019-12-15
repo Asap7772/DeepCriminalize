@@ -22,7 +22,7 @@ def save_glove():
     with open('glove_embeddings.json', 'w') as outfile:
         json.dump(embeddings_index, outfile)
 
-def get_embeddings(keyPhrases = ['bangs']):
+def get_embeddings(keyPhrases):
     with open('glove_embeddings.json', 'r') as infile:
         embeddings_index = json.load(infile)
 
@@ -62,20 +62,22 @@ def get_embeddings(keyPhrases = ['bangs']):
         i+=1
     return feature_embeddings, phrase_embeddings
 
-def get_closest_feature():
+def get_closest_feature(keyPhrases):
     features = ['Five o Clock Shadow', 'Arched Eyebrows', 'Attractive', 'Bags Under Eyes', 'Bald', 'Bangs', 'Big Lips', 'Big Nose', 'Black Hair', 'Blond Hair', 'Blurry', 'Brown Hair', 'Bushy Eyebrows', 'Chubby', 'Double Chin', 'Eyeglasses', 'Goatee', 'Gray Hair', 'Heavy Makeup', 'High Cheekbones', 'Male', 'Mouth Slightly Open', 'Mustache', 'Narrow Eyes', 'No Beard', 'Oval Face', 'Pale Skin', 'Pointy Nose', 'Receding Hairline', 'Sideburns', 'Smiling', 'Straight Hair', 'Wavy Hair', 'Wearing Earrings','Wearing Hat', 'Wearing Lipstick', 'Wearing Necklace','Wearing Necktie', 'Young']
-    feature_embeddings,phrase_embeddings = get_embeddings()
-    print(feature_embeddings[5])
-    print(phrase_embeddings)
-    print("+=====================")
+    feature_embeddings,phrase_embeddings = get_embeddings(keyPhrases=keyPhrases)
     results=[]
+    lowest_distance=[]
     i=0
     for phrase_embedding in phrase_embeddings:
-        dot_products=[np.dot(phrase_embedding,feature_embedding) for feature_embedding in feature_embeddings]
-        print(dot_products)
-        idx = np.argmin(dot_products)
-        results.append(features[idx])
+        distances=[np.linalg.norm(np.subtract(phrase_embedding,feature_embedding)) for feature_embedding in feature_embeddings]
+        # print(distances)
+        idx = np.argmin(distances)
+        distance=distances[idx]
+        if distance<4:
+            lowest_distance.append(distance)
+            results.append(features[idx])
         i+=1
     print(results)
+    print(lowest_distance)
 
-get_closest_feature()
+get_closest_feature(keyPhrases = ['bangs', 'large nose', "thick eyebrows","laughing","beautiful",'brunette'])
