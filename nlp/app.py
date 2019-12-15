@@ -1,8 +1,6 @@
 from flask import Flask, request, jsonify
-from nlp.keyPhraseApi import KeyPhrases
-from nlp.syntaxApi import WordSyntax
-# from KeyPhraseApi import KeyPhrases
-# from SyntaxApi import WordSyntax
+# from nlp.keyPhraseApi import KeyPhrases
+# from nlp.syntaxApi import WordSyntax
 from src.tl_gan.script_generation_interactive import gen_image
 
 app = Flask(__name__)
@@ -13,15 +11,18 @@ imgs = {}
 @app.route("/", methods=["PUT", "POST"])
 def put():
     uid = request.json['uid']
-    officer = request.json['o']
-    caseNumber = request.json['cn']
-    witnessName = request.json['wn']
+    # officer = request.json['o']
+    # caseNumber = request.json['cn']
+    # witnessName = request.json['wn']
     gender = request.json['g']
     ethnicity = request.json['e']
     moreDetails = request.json['md']
 
-    keyPhrases = KeyPhrases().lookup(moreDetails)
-    syntaxDict =  WordSyntax().lookup(moreDetails)
+
+    keyPhrases = moreDetails.split()
+
+    # keyPhrases = KeyPhrases().lookup(moreDetails)
+    # syntaxDict =  WordSyntax().lookup(moreDetails)
 
     arr = ['Arched_Eyebrows', 'Attractive', 'Bags_Under_Eyes', 'Bald', 'Bangs', 'Big_Lips',
     'Big_Nose', 'Black_Hair', 'Blond_Hair', 'Brown_Hair', 'Bushy_Eyebrows', 'Chubby', 'Double_Chin',
@@ -31,9 +32,9 @@ def put():
 
     #direct matching
     features = {}
-    singleWords = {}
+    # singleWords = {}
     for key in keyPhrases:
-        print('key',key)
+        # print('key',key)
         direct = key.title().replace(' ','_')
         for a in arr:
             if direct == a:
@@ -44,14 +45,16 @@ def put():
                     if word.lower() == a.lower():
                         features[word] = 1
 
-    prev = None
-    for x in syntaxDict:
-        if syntaxDict[x] == 'adj' or syntaxDict[x] == 'adv':
-            pass
+    # prev = None
+    # for x in syntaxDict:
+    #     if syntaxDict[x] == 'adj' or syntaxDict[x] == 'adv':
+    #         pass
 
     image1, image2, image3 = gen_image(gender, ethnicity, features)
 
-    dictReturn[uid] = [officer, caseNumber, witnessName, gender, ethnicity, moreDetails, keyPhrases, syntaxDict]
+    # dictReturn[uid] = [officer, caseNumber, witnessName, gender, ethnicity, moreDetails, keyPhrases, syntaxDict]
+    dictReturn[uid] = [gender, ethnicity, moreDetails, keyPhrases]
+
     imgs[0] = image1.tolist()
     imgs[1] = image2.tolist()
     imgs[2] = image3.tolist()

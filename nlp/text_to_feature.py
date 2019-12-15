@@ -1,54 +1,76 @@
-from nlp.keyPhraseApi import KeyPhrases
-from nlp.syntaxApi import WordSyntax
 import numpy as np
 import os
 import pickle
-
-BASE_DIR = 'nlp/'
-GLOVE_DIR = os.path.join(BASE_DIR, 'glove.6B')
-
-print('Indexing word vectors.')
-
-embeddings_index = {}
-with open(os.path.join(GLOVE_DIR, 'glove.6B.300d.txt'),encoding='utf-8') as f:
-    for line in f:
-        word, coefs = line.split(maxsplit=1)
-        coefs = np.fromstring(coefs, 'f', sep=' ')
-        embeddings_index[word] = coefs
-
-print('Found %s word vectors.' % len(embeddings_index))
-emb
+import json
 
 
+def save_glove():
+    BASE_DIR = './'
+    GLOVE_DIR = os.path.join(BASE_DIR, 'glove.6B')
+    print('Indexing word vectors.')
 
+    embeddings_index = {}
+    with open(os.path.join(GLOVE_DIR, 'glove.6B.50d.txt'),encoding='utf-8') as f:
+        for line in f:
+            word, coefs = line.split(maxsplit=1)
+            coefs = np.fromstring(coefs, 'f', sep=' ')
+            coefs = coefs.tolist()
+            embeddings_index[word] = coefs
 
+    print('Found %s word vectors.' % len(embeddings_index))
+    print(type(embeddings_index))
+    with open('glove_embeddings.json', 'w') as outfile:
+        json.dump(embeddings_index, outfile)
 
+def get_embeddings(keyPhrases = ['bangs']):
+    with open('glove_embeddings.json', 'r') as infile:
+        embeddings_index = json.load(infile)
 
-testSentence = "The caucasian male has long blonde hair, pretty big nose, big lips, a big mustache. He is very attractive but slightly intimidating."
-keyPhrase = KeyPhrases()
-wordSyntax = WordSyntax()
-phrases=keyPhrase.lookup(testSentence)
-print(keyPhrase.lookup(testSentence))
-embeddings_index = np.load(os.path.join('nlp','embeddings_index.npy'))
+    features = ['Five o Clock Shadow', 'Arched Eyebrows', 'Attractive', 'Bags Under Eyes', 'Bald', 'Bangs', 'Big Lips', 'Big Nose', 'Black Hair', 'Blond Hair', 'Blurry', 'Brown Hair', 'Bushy Eyebrows', 'Chubby', 'Double Chin', 'Eyeglasses', 'Goatee', 'Gray Hair', 'Heavy Makeup', 'High Cheekbones', 'Male', 'Mouth Slightly Open', 'Mustache', 'Narrow Eyes', 'No Beard', 'Oval Face', 'Pale Skin', 'Pointy Nose', 'Receding Hairline', 'Sideburns', 'Smiling', 'Straight Hair', 'Wavy Hair', 'Wearing Earrings','Wearing Hat', 'Wearing Lipstick', 'Wearing Necklace','Wearing Necktie', 'Young']
+    feature_embeddings = np.ndarray(shape=(len(features),50))
+    i=0
+    for feature in features:
+        print('Feature: ', feature)
+        feature = feature.lower()
+        feature_embedding = np.zeros((50))
+        for word in feature.split():
+            print("Word: ",word)
+            try:
+                word_embedding=embeddings_index[word]
+                feature_embedding = np.add(feature_embedding, word_embedding)
+            except:
+                pass
+        feature_embedding = np.divide(feature_embedding,len(feature.split()))
+        feature_embeddings[i]=feature_embedding
+        i+=1
+    
+    phrase_embeddings = np.ndarray(shape=(len(keyPhrases),50))
+    i=0
+    for phrase in keyPhrases:
+        print("Phrase: ",phrase)
+        phrase = phrase.lower()
+        phrase_embedding = np.zeros((50))
+        for word in phrase.split():
+            print('Word: ',word)
+            try:
+                word_embedding=embeddings_index[word]
+                phrase_embedding = np.add(phrase_embedding, word_embedding)
+            except:
+                pass
+        phrase_embedding = np.divide(phrase_embedding,len(phrase.split()))
+        phrase_embeddings[i]=phrase_embedding
+        i+=1
+    return feature_embeddings, phrase_embeddings
 
-features = ['Five o Clock Shadow', 'Arched Eyebrows', 'Attractive', 'Bags Under Eyes', 'Bald', 'Bangs', 'Big Lips', 'Big Nose', 'Black Hair', 'Blond Hair', 'Blurry', 'Brown Hair', 'Bushy Eyebrows', 'Chubby', 'Double Chin', 'Eyeglasses', 'Goatee', 'Gray Hair', 'Heavy Makeup', 'High Cheekbones', 'Male', 'Mouth Slightly Open', 'Mustache', 'Narrow Eyes', 'No Beard', 'Oval Face', 'Pale Skin', 'Pointy Nose', 'Receding Hairline', 'Sideburns', 'Smiling', 'Straight Hair', 'Wavy Hair', 'Wearing Earrings','Wearing Hat', 'Wearing Lipstick', 'Wearing Necklace','Wearing Necktie', 'Young']
-for feature in features:
-    print('hi')
-    feature = feature.lower()
-    feature_embeddings = []
-    feature_embedding = np.zeros((300))
-    for word in feature:
-        print('here')
-        word_embedding=embeddings_index[word]
-        feature_embedding = np.array([a+b for a,b in zip(feature_embedding, word_embedding)])
-        feature_embeddings.append(feature_embedding)
-np.save('feature_embeddings',feature_embeddings)
-print(len(feature_embeddings))
+def get_closest_feature():
+    features = ['Five o Clock Shadow', 'Arched Eyebrows', 'Attractive', 'Bags Under Eyes', 'Bald', 'Bangs', 'Big Lips', 'Big Nose', 'Black Hair', 'Blond Hair', 'Blurry', 'Brown Hair', 'Bushy Eyebrows', 'Chubby', 'Double Chin', 'Eyeglasses', 'Goatee', 'Gray Hair', 'Heavy Makeup', 'High Cheekbones', 'Male', 'Mouth Slightly Open', 'Mustache', 'Narrow Eyes', 'No Beard', 'Oval Face', 'Pale Skin', 'Pointy Nose', 'Receding Hairline', 'Sideburns', 'Smiling', 'Straight Hair', 'Wavy Hair', 'Wearing Earrings','Wearing Hat', 'Wearing Lipstick', 'Wearing Necklace','Wearing Necktie', 'Young']
+    feature_embeddings,phrase_embeddings = get_embeddings()
+    results=[]
+    for phrase_embedding in phrase_embeddings:
+        dot_products=[np.dot(phrase_embedding,feature_embedding) for feature_embedding in feature_embeddings]
+        print(dot_products)
+        idx = np.argmin(dot_products)
+        results.append(features[idx])
+    print(results)
 
-for phrase in phrases:
-    phrase_embedding = np.zeros((300))
-    for word in phrase:
-        word_embedding=embeddings_index[word]
-        phrase_embedding = [a+b for a,b in zip(phrase_embedding, word_embedding)]
-
-print(wordSyntax.lookup(testSentence))
+get_closest_feature()

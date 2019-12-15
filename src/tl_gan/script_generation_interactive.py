@@ -16,15 +16,15 @@ import src.tl_gan.feature_axis as feature_axis
 def gen_image(gender,race,change_feature_dict):
     print(change_feature_dict)
     race, gender = race.lower().strip(), gender.lower().strip()
-    if gender == 'female':
-        gender = 'woman'
-    else:
-        gender = 'man'
+    # if gender == 'female':
+    #     gender = 'woman'
+    # else:
+    #     gender = 'man'
     
-    if race == 'african american':
-        race = 'african_american'
-    elif race == 'east asian':
-        race = 'asian'
+    # if race == 'african american':
+    #     race = 'african_american'
+    # elif race == 'east asian':
+    #     race = 'asian'
     print(race,gender)
     idx=0
     if race=='asian':
@@ -119,8 +119,9 @@ def gen_image(gender,race,change_feature_dict):
     images=[]
     for i in range(1,4):
         maski=mask[idx]
-        for feature in change_feature_dict:
-            maski[feature] *= change_feature_dict[feature]
+        # for feature in change_feature_dict:
+        #     maski[feature] *= change_feature_dict[feature]
+        # print(maski)
         latents = latents_list[i-1]
         for feature in change_feature_dict:
             change=maski[feature]
@@ -128,10 +129,11 @@ def gen_image(gender,race,change_feature_dict):
             feature_lock_status = np.zeros(num_feature).astype('bool')
             feature_direction_disentangled = feature_axis.disentangle_feature_axis_by_idx(feature_direction, idx_base=np.flatnonzero(feature_lock_status))
             if change:
-                latents += feature_direction_disentangled[:, idx_feature]
+                latents += feature_direction_disentangled[:, idx_feature]*1
         img_cur = gen_image(latents)
         images.append(img_cur)
         # image=Image.fromarray(img_cur)
         # image.show()
     return images
 
+# gen_image('female','asian',{'Bangs':1})
