@@ -23,7 +23,7 @@ def save_glove():
         json.dump(embeddings_index, outfile)
 
 def get_embeddings(keyPhrases):
-    with open('glove_embeddings.json', 'r') as infile:
+    with open('nlp/glove_embeddings.json', 'r') as infile:
         embeddings_index = json.load(infile)
 
     features = ['Five o Clock Shadow', 'Arched Eyebrows', 'Attractive', 'Bags Under Eyes', 'Bald', 'Bangs', 'Big Lips', 'Big Nose', 'Black Hair', 'Blond Hair', 'Blurry', 'Brown Hair', 'Bushy Eyebrows', 'Chubby', 'Double Chin', 'Eyeglasses', 'Goatee', 'Gray Hair', 'Heavy Makeup', 'High Cheekbones', 'Male', 'Mouth Slightly Open', 'Mustache', 'Narrow Eyes', 'No Beard', 'Oval Face', 'Pale Skin', 'Pointy Nose', 'Receding Hairline', 'Sideburns', 'Smiling', 'Straight Hair', 'Wavy Hair', 'Wearing Earrings','Wearing Hat', 'Wearing Lipstick', 'Wearing Necklace','Wearing Necktie', 'Young']
@@ -62,10 +62,10 @@ def get_embeddings(keyPhrases):
         i+=1
     return feature_embeddings, phrase_embeddings
 
-def get_closest_feature(keyPhrases):
+def get_closest_feature(keyPhrases, cutoff=4):
     features = ['Five o Clock Shadow', 'Arched Eyebrows', 'Attractive', 'Bags Under Eyes', 'Bald', 'Bangs', 'Big Lips', 'Big Nose', 'Black Hair', 'Blond Hair', 'Blurry', 'Brown Hair', 'Bushy Eyebrows', 'Chubby', 'Double Chin', 'Eyeglasses', 'Goatee', 'Gray Hair', 'Heavy Makeup', 'High Cheekbones', 'Male', 'Mouth Slightly Open', 'Mustache', 'Narrow Eyes', 'No Beard', 'Oval Face', 'Pale Skin', 'Pointy Nose', 'Receding Hairline', 'Sideburns', 'Smiling', 'Straight Hair', 'Wavy Hair', 'Wearing Earrings','Wearing Hat', 'Wearing Lipstick', 'Wearing Necklace','Wearing Necktie', 'Young']
     feature_embeddings,phrase_embeddings = get_embeddings(keyPhrases=keyPhrases)
-    results=[]
+    results={}
     lowest_distance=[]
     i=0
     for phrase_embedding in phrase_embeddings:
@@ -73,11 +73,13 @@ def get_closest_feature(keyPhrases):
         # print(distances)
         idx = np.argmin(distances)
         distance=distances[idx]
-        if distance<4:
+        if distance<cutoff:
             lowest_distance.append(distance)
-            results.append(features[idx])
+            feature = features[idx].replace(" ", "_")
+            results[feature]=1
         i+=1
     print(results)
     print(lowest_distance)
+    return results
 
-get_closest_feature(keyPhrases = ['bangs', 'large nose', "thick eyebrows","laughing","beautiful",'brunette'])
+# get_closest_feature(keyPhrases = ['bangs', 'large nose', "thick eyebrows","laughing","beautiful",'brunette'])

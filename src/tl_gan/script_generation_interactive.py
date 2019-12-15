@@ -10,6 +10,8 @@ import json
 import numpy as np
 import pickle
 import tensorflow as tf
+import cv2
+import base64
 
 import src.tl_gan.feature_axis as feature_axis
 
@@ -132,7 +134,11 @@ def gen_image(gender,race,change_feature_dict):
             if change:
                 latents += feature_direction_disentangled[:, idx_feature]*1
         img_cur = gen_image(latents)
-        images.append(img_cur)
+        img_cur = cv2.cvtColor(img_cur, cv2.COLOR_RGB2BGR)
+        retval, buffer = cv2.imencode('.jpg', img_cur)
+        jpg_as_text = base64.b64encode(buffer).decode()
+        images.append(jpg_as_text)
+        print("TYPE: ",type(jpg_as_text))
         # image=Image.fromarray(img_cur)
         # image.show()
     return images
