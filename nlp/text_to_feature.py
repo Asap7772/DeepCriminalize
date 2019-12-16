@@ -75,8 +75,9 @@ def get_closest_feature(keyPhrases, cutoff=4):
         distance=distances[idx]
         if distance<cutoff:
             lowest_distance.append(distance)
-            feature = features[idx].replace(" ", "_")
-            results[feature]=1
+            if features[idx]!='Five o Clock Shadow':
+                feature = features[idx].replace(" ", "_")
+                results[feature]=1
         i+=1
     print(results)
     print(lowest_distance)
