@@ -1,0 +1,12 @@
+@media only screen and (max-width: 600px) {
+  .changeMobile {
+    text-align: left !important;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .changeMobile {
+    text-align: right !important;
+    margin-bottom: 0px !important;
+  }
+}
