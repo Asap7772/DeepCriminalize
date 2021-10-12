@@ -12,7 +12,7 @@ keras==2.2.4
 lmdb==0.94
 moviepy==0.2.3.5
 tensorflow==1.15.0
-opencv-python==3.4.0.12
+opencv-python==3.4.7.28
 azure==4.0.0
 azure-cognitiveservices-language-textanalytics==0.2.0
 google-cloud==0.34.0
