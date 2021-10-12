@@ -11,4 +11,4 @@ lmdb==0.94
 moviepy==0.2.3.5
 scikit_learn==0.20.0
 tensorflow-gpu==1.15.0
-opencv-python==3.4.0.12
+opencv-python==4.2.0.32
