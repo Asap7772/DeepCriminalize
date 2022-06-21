@@ -3,7 +3,7 @@ six==1.11.0
 scipy==1.1.0
 h5py==2.7.1
 pandas==0.22.0
-numpy==1.15.1
+numpy==1.22.0
 cryptography==2.1.4
 Pillow==5.3.0
 keras==2.2.4
